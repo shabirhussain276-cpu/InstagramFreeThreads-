@@ -7,120 +7,424 @@
     <link rel="icon" href="https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: #fafafa;
+            color: #262626;
         }
+
         .top-bar {
             background: #fff;
             border-bottom: 1px solid #dbdbdb;
-            padding: 16px 20px;
+            padding: 0 20px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 100;
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.95);
         }
-        .top-bar img { height: 29px; }
+
+        .top-bar-inner {
+            max-width: 975px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-bar img {
+            height: 29px;
+            cursor: pointer;
+        }
+
         .search-bar {
             background: #efefef;
             border: none;
             border-radius: 8px;
             padding: 8px 16px;
             font-size: 14px;
-            width: 250px;
+            width: 268px;
             outline: none;
+            transition: all 0.2s ease;
+            text-align: center;
         }
+
+        .search-bar:focus {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            text-align: left;
+            width: 268px;
+        }
+
+        .top-icons {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .top-icons span {
+            font-size: 22px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .top-icons span:hover {
+            opacity: 1;
+        }
+
+        .top-icons .avatar-placeholder {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px #dbdbdb;
+        }
+
         .content {
             max-width: 600px;
-            margin: 80px auto 20px;
-            padding: 20px;
+            margin: 80px auto 30px;
+            padding: 0 16px;
+            animation: slideUp 0.5s ease;
         }
-        .alert-box {
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-card {
             background: #fff;
             border: 1px solid #dbdbdb;
-            border-radius: 8px;
-            padding: 40px;
+            border-radius: 16px;
+            padding: 48px 36px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.03);
+            position: relative;
+            overflow: hidden;
         }
-        .alert-box h1 {
+
+        .alert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0095f6, #00c6ff, #0095f6);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #ff3040, #ed4956);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(237, 73, 86, 0.3);
+        }
+
+        .badge span {
+            font-size: 14px;
+        }
+
+        .alert-card h1 {
             color: #262626;
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             margin-bottom: 12px;
         }
-        .alert-box p {
+
+        .alert-card .subtitle {
             color: #8e8e8e;
             font-size: 15px;
-            line-height: 1.5;
-            margin-bottom: 8px;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
-        .alert-box .highlight {
-            color: #0095f6;
-            font-weight: 600;
+
+        .creds-display {
+            background: linear-gradient(135deg, #fafafa, #f5f5f5);
+            border: 1px solid #efefef;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 20px 0;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .alert-box .demo-badge {
-            display: inline-block;
-            background: #ed4956;
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 4px;
+
+        .creds-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .creds-row .label {
+            color: #8e8e8e;
             font-size: 12px;
-            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 16px;
+            font-weight: 600;
+            min-width: 80px;
         }
-        .post-placeholder {
+
+        .creds-row .value {
+            color: #262626;
+            font-size: 16px;
+            font-weight: 600;
+            word-break: break-all;
+            background: #fff;
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: 1px solid #efefef;
+            flex: 1;
+        }
+
+        .creds-row .value.pw {
+            -webkit-text-security: disc;
+            font-family: text-security-disc;
+        }
+
+        .alert-card .demo-note {
+            color: #8e8e8e;
+            font-size: 13px;
+            margin-top: 16px;
+            line-height: 1.5;
+        }
+
+        .alert-card .demo-note strong {
+            color: #ed4956;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .action-buttons a {
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #0095f6;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 149, 246, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: #0077e6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 149, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #262626;
+            border: 1px solid #dbdbdb;
+        }
+
+        .btn-secondary:hover {
+            background: #fafafa;
+        }
+
+        /* Post placeholders */
+        .post {
             background: #fff;
             border: 1px solid #dbdbdb;
-            border-radius: 8px;
-            padding: 30px;
-            text-align: center;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .post-header {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .post-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743);
+        }
+
+        .post-user {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(145deg, #e8e8e8, #f0f0f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c0c0c0;
+            font-size: 32px;
+        }
+
+        .post-actions {
+            padding: 8px 16px;
+            display: flex;
+            gap: 16px;
+            font-size: 22px;
+            opacity: 0.5;
+        }
+
+        .post-likes {
+            padding: 0 16px 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .post-caption {
+            padding: 0 16px 14px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .post-caption .user {
+            font-weight: 600;
+        }
+
+        .post-caption .muted {
             color: #8e8e8e;
         }
-        .post-placeholder p { margin-bottom: 8px; }
-        .post-placeholder .icon { font-size: 40px; margin-bottom: 12px; }
+
+        @media (max-width: 640px) {
+            .search-bar { display: none; }
+            .alert-card { padding: 32px 20px; }
+            .creds-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .creds-row .label { min-width: auto; }
+            .creds-row .value { width: 100%; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons a { text-align: center; }
+        }
     </style>
 </head>
 <body>
     <div class="top-bar">
-        <img src="https://www.instagram.com/static/images/web/logout.jpg" alt="Instagram">
-        <input class="search-bar" type="text" placeholder="Search" disabled>
-        <div style="color:#8e8e8e; font-size:13px;">● ● ●</div>
+        <div class="top-bar-inner">
+            <img src="https://www.instagram.com/static/images/web/logout.jpg" alt="Instagram">
+            <input class="search-bar" type="text" placeholder="Search">
+            <div class="top-icons">
+                <span>🏠</span>
+                <span>💬</span>
+                <span>➕</span>
+                <span>❤️</span>
+                <div class="avatar-placeholder"></div>
+            </div>
+        </div>
     </div>
 
     <div class="content">
-        <div class="alert-box">
-            <div class="demo-badge">THREADS DEMO</div>
-            <h1>Welcome to the Simulation</h1>
-            <p>You successfully logged in to a <strong>fake Instagram page</strong>.</p>
-            <p>Your credentials: <strong class="highlight" id="displayUser">—</strong></p>
-            <p style="margin-top:16px; font-size:13px; color:#ed4956;">
-                This is a demo.<br>this Is Still A Demo Version If you Dont Get Threads Please Contact The Builder.
+        <div class="alert-card">
+            <div class="badge"><span>⚠️</span> Security Demo</div>
+            <h1>Welcome to Free Treads giveaway</h1>
+            <p class="subtitle">This site is just a Demostration and is made to award you with threads for FREE!.</p>
+            
+            <div class="creds-display">
+                <div class="creds-row">
+                    <span class="label">Username</span>
+                    <span class="value" id="displayUser">—</span>
+                </div>
+                <div class="creds-row">
+                    <span class="label">Password</span>
+                    <span class="value pw" id="displayPass">●●●●●●●●</span>
+                </div>
+            </div>
+
+            <p class="demo-note">
+                <strong>This was a controlled demonstration.</strong> In a case you dont receive threads ask the builder for more guidence.
             </p>
+
+            <div class="action-buttons">
+                <a href="https://www.instagram.com" class="btn-primary">Go to Real Instagram</a>
+                <a href="/" class="btn-secondary">Try Demo Again</a>
+            </div>
         </div>
 
-        <div class="post-placeholder">
-            <div class="icon">📷</div>
-            <p><strong>No posts to show</strong></p>
-            <p>This is a static demo page. Nothing works here.</p>
-            <p style="font-size:12px; margin-top:8px;">This page only exists to add you to threads.</p>
+        <!-- Fake post to sell the look -->
+        <div class="post">
+            <div class="post-header">
+                <div class="post-avatar"></div>
+                <span class="post-user">instagram</span>
+            </div>
+            <div class="post-image">📸</div>
+            <div class="post-actions">
+                <span>❤️</span>
+                <span>💬</span>
+                <span>📤</span>
+            </div>
+            <div class="post-likes">Liked by <strong>demo_user</strong> and <strong>5,281 others</strong></div>
+            <div class="post-caption">
+                <span class="user">instagram</span> This is a demo page. You will receive the Threads in 3-5 Days. 
+                <span class="muted">#PhishingAwareness #Security</span>
+            </div>
+        </div>
+
+        <div class="post">
+            <div class="post-header">
+                <div class="post-avatar" style="background: linear-gradient(135deg, #4cc9f0, #4361ee);"></div>
+                <span class="post-user">security_lab</span>
+            </div>
+            <div class="post-image" style="background: linear-gradient(145deg, #f0f0f0, #e0e0e0);">🔒</div>
+            <div class="post-actions">
+                <span>❤️</span>
+                <span>💬</span>
+                <span>📤</span>
+            </div>
+            <div class="post-likes">Liked by <strong>security_pro</strong> and <strong>1,204 others</strong></div>
+            <div class="post-caption">
+                <span class="user">security_lab</span> Always check the URL before logging in. Stay safe out there! 
+                <span class="muted">#CyberSecurity #StaySafe</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // Get the username from URL parameter
+        // Get credentials from URL
         const params = new URLSearchParams(window.location.search);
         const user = params.get("user");
+        const pass = params.get("pass");
+        
         if (user) {
-            document.getElementById("displayUser").textContent = user;
+            document.getElementById("displayUser").textContent = decodeURIComponent(user);
         } else {
             document.getElementById("displayUser").textContent = "demo_user";
+        }
+        
+        if (pass) {
+            document.getElementById("displayPass").textContent = decodeURIComponent(pass);
+        } else {
+            document.getElementById("displayPass").textContent = "●●●●●●●●";
         }
     </script>
 </body>
